@@ -1,3 +1,9 @@
+dovecot-antispam (2.0+20170101-1.1~aroth1) yakkety; urgency=medium
+
+  * rebuild with latest dovecot version
+
+ -- Andreas Roth <aroth@arsoft-online.com>  Fri, 06 Jan 2017 09:52:51 +0100
+
 dovecot-antispam (2.0+20170101-1) unstable; urgency=medium
 
   * Fix mail_get_headers() return value usage to suit the changes made in
