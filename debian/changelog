@@ -1,0 +1,180 @@
+dovecot-antispam (2.0+20170101-1) unstable; urgency=medium
+
+  * Fix mail_get_headers() return value usage to suit the changes made in
+    dovecot 2.2.27.  The change here is backward compatible with earlier
+    dovecot versions still.
+
+  * Don't Suggest dspam anymore, the dspam package was abandoned upstream
+    and dropped from Jessie.  Closes: #818794
+
+ -- Ron Lee <ron@debian.org>  Fri, 06 Jan 2017 01:54:51 +1030
+
+dovecot-antispam (2.0+20150222-1) unstable; urgency=medium
+
+  * Use T_BEGIN/T_END since t_push() changed its signature and broke API
+    in dovecot 2.2.14, and this is the interface to it that things were
+    supposed to switch to some time back.  Closes: #765943
+
+ -- Ron Lee <ron@debian.org>  Sat, 04 Jul 2015 10:30:53 +0930
+
+dovecot-antispam (2.0+20130912-2) unstable; urgency=medium
+
+  * Use the correct argc for pipe.ham_args
+
+    This fixes a typo bug, where if the number of arguments set for
+    antispam_pipe_program_spam_arg is not the same as what was set
+    for antispam_pipe_program_notspam_arg, then we'll either scribble
+    past the end of the allocated argv array, or populate it with
+    pointers to whatever followed the real ham_args.
+
+    Thanks to Peter Colberg who reported this, including a correct
+    patch to fix it, to the security team.  The security implications
+    of this seem somewhat limited, since you need to edit a config
+    file as root to create the bad situation, and there is no path
+    for remote injection of crafted data (whether it overflows or
+    underflows) if you do, the argv array will just get some 'random'
+    extra pointers to existing internal data.
+
+    However it does pose a potential problem for a legitimate user
+    who does legitimately need or want to pass a different number of
+    arguments for the spam and ham cases, since that could crash
+    dovecot, or confuse the hell out of their pipe program when it
+    gets some random extra arguments.  It's probably gone unnoticed
+    for this long because most uses will pass the same number of
+    arguments for both of them, but that's not a necessary condition
+    in the general case.
+
+ -- Ron Lee <ron@debian.org>  Sun, 22 Feb 2015 09:27:51 +1030
+
+dovecot-antispam (2.0+20130912-1) unstable; urgency=medium
+
+  * Merge upstreamed patches from the upstream branch,
+    no new changes to the Debian package from this.
+  * Depend on dovecot ABI rather than a specific Dovecot package version.
+    Many thanks to Jelmer Vernooij for both adding support for that to the
+    dovecot package and providing a patch for this one to use it.  Now we
+    just need dovecot upstream to start bumping ABI less often than version :)
+    Closes: #755432
+
+ -- Ron Lee <ron@debian.org>  Sat, 04 Oct 2014 16:08:32 +0930
+
+dovecot-antispam (2.0+20130822-2) unstable; urgency=low
+
+  * More updates for dovecot 2.2.  Thanks again to Micah for really testing
+    it this time :)
+
+ -- Ron Lee <ron@debian.org>  Thu, 12 Sep 2013 18:53:17 +0930
+
+dovecot-antispam (2.0+20130822-1) unstable; urgency=low
+
+  * Update for compatibility with dovecot 2.2.  Thanks to Micah for doing the
+    legwork of testing and getting things patched.
+
+ -- Ron Lee <ron@debian.org>  Sun, 08 Sep 2013 00:14:37 +0930
+
+dovecot-antispam (2.0+20120225-3) unstable; urgency=low
+
+  * Apply patch from Johannes for dovecot 2.1  Closes: #676007
+
+ -- Ron Lee <ron@debian.org>  Wed, 20 Jun 2012 01:55:54 +0930
+
+dovecot-antispam (2.0+20120225-2) unstable; urgency=low
+
+  * Try that again with a dependency range that allows for the Debian version.
+
+ -- Ron Lee <ron@debian.org>  Sun, 25 Mar 2012 03:37:09 +1030
+
+dovecot-antispam (2.0+20120225-1) unstable; urgency=low
+
+  * Pull in upstream patch to allow multiple spam/notspam arguments.
+  * Fix dspam config in antispam.7 examples.  Closes: #663721
+  * Hard depend on the version of dovecot this is built with.  Closes: #664616
+    Maybe this will remind the dovecot maintainers to request a binNMU when they
+    push a new upstream version, since asking nicely, repeatedly, hasn't helped.
+
+ -- Ron Lee <ron@debian.org>  Sun, 25 Mar 2012 00:11:15 +1030
+
+dovecot-antispam (2.0-2) unstable; urgency=low
+
+  * Dovecot modules are now installed in $moduledir, the /imap subdirectory
+    is gone with version 2.
+
+ -- Ron Lee <ron@debian.org>  Sat, 26 Nov 2011 00:13:03 +1030
+
+dovecot-antispam (2.0-1) unstable; urgency=low
+
+  * Now with support for the dovecot 2.0 release.  Closes: #625188, #631143
+
+ -- Ron Lee <ron@debian.org>  Fri, 11 Nov 2011 04:13:57 +1030
+
+dovecot-antispam (1.4~rc3-1) unstable; urgency=low
+
+  * Update the antispam_backend docs for crm114 and dspam.
+    Reapply the mainline revert of the extra mail_plugins options,
+    which was swallowed in the v1.4-rc2 merge.  Closes: #617273.
+
+ -- Ron Lee <ron@debian.org>  Sat, 12 Mar 2011 15:59:16 +1030
+
+dovecot-antispam (1.4~rc2-1) unstable; urgency=low
+
+  * Drop all the extra builds again.
+    All of the backends build into a single plugin now.
+
+ -- Ron Lee <ron@debian.org>  Sun, 06 Mar 2011 07:49:56 +1030
+
+dovecot-antispam (1.3-1) unstable; urgency=low
+
+  * New upstream release.  Merges patches from the previous Debian release
+    and fixes some error checking.  Closes: #544588, #564682, #581676
+  * Build more of the backends.  None of them add any extra hard deps, and
+    they're all tiny, so just put them all in the one package. Closes: #540283
+
+ -- Ron Lee <ron@debian.org>  Thu, 08 Apr 2010 14:13:38 +0930
+
+dovecot-antispam (1.2+20090702-1) unstable; urgency=low
+
+  * Adopt this one officially now with the maintainer's blessing. Thanks Jonny!
+  * Update the Vcs-* URLs to point at the repo this was prepared from.
+
+ -- Ron Lee <ron@debian.org>  Sat, 25 Jul 2009 04:45:14 +0930
+
+dovecot-antispam (1.2+20090702-0.2) unstable; urgency=low
+
+  * Include stdlib.h for the getenv prototype.  Closes: #537765
+  * Fix the match_fn_t prototype for dovecot 1.2 which makes more parameters
+    to it const.
+
+ -- Ron Lee <ron@debian.org>  Wed, 22 Jul 2009 23:14:52 +0930
+
+dovecot-antispam (1.2+20090702-0.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Import upstream fix af0f8f8de27901e2efb9560a1fc66c7af3cd810b, required to
+    build this with dovecot 1.2 now in unstable.  Closes: #537077
+
+ -- Ron Lee <ron@debian.org>  Fri, 17 Jul 2009 08:36:46 +0930
+
+dovecot-antispam (1.2-0.1) unstable; urgency=low
+
+  * Non-maintainer upload.  (Pulling in new upstream source)
+  * Rebuild to suit dovecot 1.1.16 currently in unstable.
+  * Note in the description this package is built using the mailtrain backend.
+    half- Closes: #532605, it probably still would be nice to build for all of
+    the backends, but I only need this one too, so add others as people to test
+    them put their hands up.
+  * Tidy up a little in debian/rules.
+
+ -- Ron Lee <ron@debian.org>  Sun, 12 Jul 2009 21:19:58 +0930
+
+dovecot-antispam (1.1+20090218.git.g28075fa-2) unstable; urgency=low
+
+  * debian/gbp.conf: Removed no-create-orig line.
+  * Rebuilding with newer dovecot. (Closes: #521643)
+
+ -- Jonny Lamb <jonny@debian.org>  Wed, 08 Apr 2009 09:43:38 +0100
+
+dovecot-antispam (1.1+20090218.git.g28075fa-1) unstable; urgency=low
+
+  * Initial release.
+
+ -- Jonny Lamb <jonny@debian.org>  Wed, 04 Mar 2009 16:06:42 +0000
